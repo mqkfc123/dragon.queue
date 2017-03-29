@@ -13,7 +13,7 @@ namespace DQueue
     public class Activemq : IDisposable, IMessageQueue
     {
         public enum DataType
-        {
+        {  
             Text,
             Byte
         }
