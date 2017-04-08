@@ -13,7 +13,7 @@ namespace DQueue
     public class Rabbitmq : IDisposable, IMessageQueue
     {
         public enum TypeName
-        {
+        { 
             Fanout,
             Direct,
             Topic,
