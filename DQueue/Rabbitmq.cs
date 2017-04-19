@@ -61,9 +61,11 @@ namespace DQueue
         }
         public void UseSubscribe()
         {
+           // EventingBasicConsumer
             this.m_Consumer = new QueueingBasicConsumer(this.m_Channel);
             this.m_Channel.BasicConsume(this.QueueName, this.AutoAck, this.m_Consumer);
         }
+        [Obsolete("测试")]
         public void SendMQMessage(string msgText)
         {
             IBasicProperties basicProperties = this.m_Channel.CreateBasicProperties();
@@ -120,6 +122,7 @@ namespace DQueue
             this.m_Channel = this.m_Connection.CreateModel();
             this.m_Channel.ExchangeDeclare(this.ExchangeName, this.RType.ToString().ToLower(), true);
             this.m_Channel.QueueDeclare(this.QueueName, true, false, false, null);
+            //手工绑定交换机
             this.m_Channel.QueueBind(this.QueueName, this.ExchangeName, this.RoutingKey, null);
         }
         public void Dispose()
