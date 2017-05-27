@@ -19,10 +19,11 @@ namespace DQueueTest
                 var mesStr = Console.ReadLine();
                 if (!string.IsNullOrEmpty(mesStr))
                 {
-                    ActitvmqClient.InsertQueue(mesStr, "liuyl_Queue");
+                    //ActitvmqClient.InsertQueue(mesStr, "liuyl_Queue");
+                    RabbitMQClient.InsertQueue(mesStr, "liuyl_Queue");
                 }
             }
-
+            //RabbitMQ
         }
     }
 

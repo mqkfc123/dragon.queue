@@ -11,8 +11,13 @@ namespace DQueueService
         static void Main(string[] args)
         {
             Console.WriteLine("start");
-            ActitvmqService activemq = new ActitvmqService();
-            activemq.SendMessActitvMQ();
+            //ActitvmqService activemq = new ActitvmqService();
+            //activemq.SendMessActitvMQ();
+
+            RabbitMQService rabbitMQ = new RabbitMQService();
+            rabbitMQ.SendMessActitvMQ();
+
+
             Console.ReadLine();
         }
     }
