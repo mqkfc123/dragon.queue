@@ -34,6 +34,7 @@ namespace DQueueTest
                     mq.VirtualHost = "15672";
                     mq.QueueName = queueName;
                     mq.ExchangeName = "ExchangeName";
+                    mq.AutoAck = true;
                     mq.UserName = "zxsj";
                     mq.Password = "zxsj";
 

@@ -56,8 +56,8 @@ namespace DQueue
 
         /// <summary>
         /// 监听
-        /// </summary>
-        private void Consumer_Listener()
+        /// </summary>  p 
+        public void AddListening()
         {
             if (onReceive != null)
             {
@@ -101,9 +101,8 @@ namespace DQueue
             try
             {
                 while (!this.IsReceOver)
-                {
-                    this.Consumer_Listener();
-                    System.Threading.Thread.Sleep(this.SleepInterval);
+                { 
+                    System.Threading.Thread.Sleep(this.SleepInterval); 
                 }
             }
             catch (Exception ex)
@@ -148,7 +147,7 @@ namespace DQueue
             this.m_Connection = this.m_ConnectionFactory.CreateConnection();
             this.m_Channel = this.m_Connection.CreateModel();
             //申明交换机 
-            this.m_Channel.ExchangeDeclare(this.ExchangeName, this.RType.ToString().ToLower(), true);
+            this.m_Channel.ExchangeDeclare(this.ExchangeName, this.RType.ToString().ToLower(), true, false, null);
             //申明队列
             this.m_Channel.QueueDeclare(this.QueueName, true, false, false, null);
             //绑定交换机

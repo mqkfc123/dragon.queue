@@ -28,6 +28,7 @@ namespace DQueueService
 
                     rabRead.Init();
                     rabRead.SubscribeQueue();
+                    rabRead.AddListening();
                     rabRead.ReceiveMQMessage();
                     //  结束时使用
                     rabRead.IsReceOver = true;
