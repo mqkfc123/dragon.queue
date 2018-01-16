@@ -20,13 +20,13 @@ namespace DQueue
             Topic,
             Headers
         }
-        private ConnectionFactory m_ConnectionFactory = null; 
-        private IConnection m_Connection = null;
-        private IModel m_Channel = null;
-        //事件触发
-        private EventingBasicConsumer m_Consumer = null;
-        public event ReceiveEventHandler onReceive;
 
+        private ConnectionFactory _connectionFactory = null; 
+        private IConnection _connection = null;
+        private IModel _channel = null;
+        //事件触发
+        private EventingBasicConsumer _eventCnsumer = null;
+        public event ReceiveEventHandler onReceive;
 
         public string ExchangeName { get; set; }
         public TypeName RType { get; set; }
@@ -64,18 +64,17 @@ namespace DQueue
             {
                 string empty = string.Empty;
                 //BasicDeliverEventArgs messageObj = this.m_Consumer.Queue.Dequeue(); 
-                m_Consumer.Received += (sender, e) =>
+                _eventCnsumer.Received += (sender, e) =>
                 { 
                     var msg = Encoding.UTF8.GetString(e.Body);
-                    this.onReceive(this, new ReceiveEventArgs(msg, this.m_Channel));
+                    this.onReceive(this, new ReceiveEventArgs(msg, this._channel));
                     if (!this.AutoAck)
                     {
-                        this.m_Channel.BasicAck(e.DeliveryTag, true);
+                        this._channel.BasicAck(e.DeliveryTag, true);
                     } 
                 };
             }
         }
-
 
         /// <summary>
         /// 订阅队列
@@ -83,18 +82,17 @@ namespace DQueue
         public void SubscribeQueue()
         {
             //EventingBasicConsumer
-            this.m_Consumer = new EventingBasicConsumer(this.m_Channel);
+            this._eventCnsumer = new EventingBasicConsumer(this._channel);
             //指定消费队列
-            this.m_Channel.BasicConsume(this.QueueName, this.AutoAck, this.m_Consumer);
+            this._channel.BasicConsume(this.QueueName, this.AutoAck, this._eventCnsumer);
         }
-         
 
         [Obsolete("测试")]
         public void SendMQMessage(string msgText)
         {
-            IBasicProperties basicProperties = this.m_Channel.CreateBasicProperties();
+            IBasicProperties basicProperties = this._channel.CreateBasicProperties();
             basicProperties.DeliveryMode = 2;
-            this.m_Channel.BasicPublish(this.ExchangeName, this.RoutingKey, basicProperties, System.Text.Encoding.UTF8.GetBytes(msgText));
+            this._channel.BasicPublish(this.ExchangeName, this.RoutingKey, basicProperties, System.Text.Encoding.UTF8.GetBytes(msgText));
         }
 
         /// <summary>
@@ -115,12 +113,13 @@ namespace DQueue
                 throw ex;
             }
         }
+
         public int GetCurrentCount()
         {
             int result;
             try
             {
-                BasicGetResult basicGetResult = this.m_Channel.BasicGet(this.QueueName, false);
+                BasicGetResult basicGetResult = this._channel.BasicGet(this.QueueName, false);
                 if (basicGetResult != null)
                 {
                     uint messageCount = basicGetResult.MessageCount;
@@ -137,41 +136,40 @@ namespace DQueue
             }
             return result;
         }
+
         /// <summary>
         /// 初始化队列
         /// </summary>
         public void Init()
         {
             //IPHostEntry hostEntry = Dns.GetHostEntry(this.QueueIP);
-            m_ConnectionFactory = new ConnectionFactory();
-            m_ConnectionFactory.HostName = this.QueueIP;
-            //m_ConnectionFactory.Port = Convert.ToInt32(this.VirtualHost);
+            _connectionFactory = new ConnectionFactory();
+            _connectionFactory.HostName = this.QueueIP;
+            //_connectionFactory.Port = Convert.ToInt32(this.VirtualHost);
             //m_ConnectionFactory.VirtualHost = this.VirtualHost; 
-            m_ConnectionFactory.UserName = this.UserName;
-            m_ConnectionFactory.Password = this.Password; 
-            this.m_Connection = this.m_ConnectionFactory.CreateConnection();
-            this.m_Channel = this.m_Connection.CreateModel();
+            _connectionFactory.UserName = this.UserName;
+            _connectionFactory.Password = this.Password; 
+            this._connection = this._connectionFactory.CreateConnection();
+            this._channel = this._connection.CreateModel();
             //申明交换机 
-            this.m_Channel.ExchangeDeclare(this.ExchangeName, this.RType.ToString().ToLower(), true, false, null);
+            this._channel.ExchangeDeclare(this.ExchangeName, this.RType.ToString().ToLower(), true, false, null);
             //申明队列
-            this.m_Channel.QueueDeclare(this.QueueName, true, false, false, null);
+            this._channel.QueueDeclare(this.QueueName, true, false, false, null);
             //绑定交换机
-            this.m_Channel.QueueBind(this.QueueName, this.ExchangeName, this.RoutingKey, null);
-
+            this._channel.QueueBind(this.QueueName, this.ExchangeName, this.RoutingKey, null);
         }
-
 
         public void Dispose()
         {
-            if (null != this.m_Channel)
+            if (null != this._channel)
             {
-                this.m_Channel.Close();
+                this._channel.Close();
             }
-            if (null != this.m_Connection)
+            if (null != this._connection)
             {
-                this.m_Connection.Close();
+                this._connection.Close();
             }
-            this.m_ConnectionFactory = null;
+            this._connectionFactory = null;
         }
 
 
