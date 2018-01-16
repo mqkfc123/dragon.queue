@@ -1,1 +1,1 @@
-基于rabbitmq 的封装
+基于rabbitmq 的封装 
