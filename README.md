@@ -1,1 +1,1 @@
-queue
+基于rabbitmq 的封装
