@@ -7,8 +7,8 @@
     <ProjectGuid>{93B5E71A-0CD8-414B-96D5-C5F8C9C1EC67}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DQueueTest</RootNamespace>
-    <AssemblyName>DQueueTest</AssemblyName>
+    <RootNamespace>DQueueClient</RootNamespace>
+    <AssemblyName>DQueueClient</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
