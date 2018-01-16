@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DQueueService
@@ -17,13 +18,14 @@ namespace DQueueService
             {
                 using (var rabRead = (Rabbitmq)MQFactory.CreateMessageQueue(MQFactory.MQType.RabbitMQ))
                 {
-                    rabRead.QueueIP = "192.168.1.120";// ConfigurationManager.AppSettings["QueueUrl"];
-                    rabRead.QueueName = "liuyl_Queue";
+                    rabRead.QueueIP = "106.15.180.98";// ConfigurationManager.AppSettings["QueueUrl"];
+                    rabRead.QueueName = "Surevy_Reward_Queue";
                     rabRead.VirtualHost = "15672"; 
-                    rabRead.ExchangeName = "ExchangeName";
+                    rabRead.ExchangeName = "SurevyExchangeName";
                     rabRead.UserName = "zxsj";
                     rabRead.Password = "zxsj";
-                    rabRead.AutoAck = true;
+                    rabRead.AutoAck = false;
+                    rabRead.RType = Rabbitmq.TypeName.Direct;
                     rabRead.onReceive += imq_onReceive;
 
                     rabRead.Init();
@@ -32,6 +34,7 @@ namespace DQueueService
                     rabRead.ReceiveMQMessage();
                     //  结束时使用
                     rabRead.IsReceOver = true;
+
                 }
             }
             catch (Exception ex)
@@ -45,6 +48,8 @@ namespace DQueueService
             var mm = e.MessageObj;
 
             Console.WriteLine($"rabbitMQ:{mm}");
+            Thread.Sleep(2000);
+
         }
     }
 }

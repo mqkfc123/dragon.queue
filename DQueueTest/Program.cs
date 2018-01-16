@@ -20,7 +20,7 @@ namespace DQueueTest
                 if (!string.IsNullOrEmpty(mesStr))
                 {
                     //ActitvmqClient.InsertQueue(mesStr, "liuyl_Queue");
-                    RabbitMQClient.InsertQueue(mesStr, "liuyl_Queue");
+                    RabbitMQClient.InsertQueue(mesStr, "Surevy_Reward_Queue");
                 }
             }
             //RabbitMQ

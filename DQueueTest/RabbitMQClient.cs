@@ -30,13 +30,14 @@ namespace DQueueTest
                         return iQueue;
                     }
                     var mq = (Rabbitmq)MQFactory.CreateMessageQueue(MQFactory.MQType.RabbitMQ);
-                    mq.QueueIP = "192.168.1.120";//ConfigurationManager.AppSettings["QueueUrl"]; ;
+                    mq.QueueIP = "106.15.180.98";//ConfigurationManager.AppSettings["QueueUrl"]; ;
                     mq.VirtualHost = "15672";
                     mq.QueueName = queueName;
-                    mq.ExchangeName = "ExchangeName";
-                    mq.AutoAck = true;
+                    mq.ExchangeName = "SurevyExchangeName";
+                    mq.AutoAck = false;
                     mq.UserName = "zxsj";
                     mq.Password = "zxsj";
+                    mq.RType = Rabbitmq.TypeName.Direct;
 
                     mq.Init();
                     iQueue = mq;

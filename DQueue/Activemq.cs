@@ -9,11 +9,11 @@ using Apache.NMS.ActiveMQ.Commands;
 using DQueue.Event;
 
 namespace DQueue
-{ 
+{
     public class Activemq : IDisposable, IMessageQueue
     {
         public enum DataType
-        {  
+        {
             Text,
             Byte
         }
@@ -29,7 +29,7 @@ namespace DQueue
         private IMessageConsumer m_MessageConsumer = null;
         public event ReceiveEventHandler onReceive;
         public string QueueIP { get; set; }
-       
+
         public string QueueName { get; set; }
         public Activemq.DataType DType { get; set; }
         public Activemq.ActiveMQType AMQType { get; set; }
@@ -74,7 +74,7 @@ namespace DQueue
             IMessageProducer messageProducer = this.m_Session.CreateProducer(this.m_Destination);
             ITextMessage textMessage = messageProducer.CreateTextMessage();
             textMessage.Text = msgText;
-            
+
             messageProducer.Send(textMessage, MsgDeliveryMode.NonPersistent, MsgPriority.Normal, TimeSpan.MinValue);
         }
         public void ReceiveMQMessage()

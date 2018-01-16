@@ -18,11 +18,11 @@ namespace DQueue
         {
             switch (aMQType)
             {
-                case MQType.ActiveMQ:
-                    {
-                        IMessageQueue result = new Activemq();
-                        return result;
-                    }
+                //case MQType.ActiveMQ:
+                //    {
+                //        IMessageQueue result = new Activemq();
+                //        return result;
+                //    }
                 case MQType.RabbitMQ:
                     {
                         IMessageQueue result = new Rabbitmq();

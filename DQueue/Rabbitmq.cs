@@ -14,18 +14,19 @@ namespace DQueue
     public class Rabbitmq : IDisposable, IMessageQueue
     {
         public enum TypeName
-        { 
+        {
             Fanout,
             Direct,
             Topic,
             Headers
         }
-        private ConnectionFactory m_ConnectionFactory = null;
+        private ConnectionFactory m_ConnectionFactory = null; 
         private IConnection m_Connection = null;
         private IModel m_Channel = null;
         //事件触发
         private EventingBasicConsumer m_Consumer = null;
         public event ReceiveEventHandler onReceive;
+
 
         public string ExchangeName { get; set; }
         public TypeName RType { get; set; }
@@ -62,11 +63,15 @@ namespace DQueue
             if (onReceive != null)
             {
                 string empty = string.Empty;
-                //BasicDeliverEventArgs messageObj = this.m_Consumer.Queue.Dequeue();
+                //BasicDeliverEventArgs messageObj = this.m_Consumer.Queue.Dequeue(); 
                 m_Consumer.Received += (sender, e) =>
-                {
+                { 
                     var msg = Encoding.UTF8.GetString(e.Body);
                     this.onReceive(this, new ReceiveEventArgs(msg, this.m_Channel));
+                    if (!this.AutoAck)
+                    {
+                        this.m_Channel.BasicAck(e.DeliveryTag, true);
+                    } 
                 };
             }
         }
@@ -82,8 +87,7 @@ namespace DQueue
             //指定消费队列
             this.m_Channel.BasicConsume(this.QueueName, this.AutoAck, this.m_Consumer);
         }
-
-
+         
 
         [Obsolete("测试")]
         public void SendMQMessage(string msgText)
@@ -99,10 +103,11 @@ namespace DQueue
         public void ReceiveMQMessage()
         {
             try
-            {
+            { 
                 while (!this.IsReceOver)
-                { 
-                    System.Threading.Thread.Sleep(this.SleepInterval); 
+                {
+                    //this.AddListening();
+                    System.Threading.Thread.Sleep(this.SleepInterval);
                 }
             }
             catch (Exception ex)
@@ -152,6 +157,7 @@ namespace DQueue
             this.m_Channel.QueueDeclare(this.QueueName, true, false, false, null);
             //绑定交换机
             this.m_Channel.QueueBind(this.QueueName, this.ExchangeName, this.RoutingKey, null);
+
         }
 
 
