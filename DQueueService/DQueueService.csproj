@@ -61,9 +61,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DQueue\DQueue.csproj">
-      <Project>{d58c97f5-83e4-41e0-be05-6154265961bc}</Project>
-      <Name>DQueue</Name>
+    <ProjectReference Include="..\DQueue.RabbitMQ\DQueue.RabbitMQ.csproj">
+      <Project>{f5ade1eb-e6d9-4c39-a6aa-6caba16f8714}</Project>
+      <Name>DQueue.RabbitMQ</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,4 @@
-﻿using DQueue;
+﻿using DQueue.RabbitMQ;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -29,7 +29,7 @@ namespace DQueueTest
                         iQueue = LstMqs[queueName];
                         return iQueue;
                     }
-                    var mq = (Rabbitmq)MQFactory.CreateMessageQueue(MQFactory.MQType.RabbitMQ);
+                    var mq = new DRabbitMQ();
                     mq.QueueIP = "106.15.180.98";//ConfigurationManager.AppSettings["QueueUrl"]; ;
                     mq.VirtualHost = "15672";
                     mq.QueueName = queueName;
@@ -37,7 +37,7 @@ namespace DQueueTest
                     mq.AutoAck = false;
                     mq.UserName = "zxsj";
                     mq.Password = "zxsj";
-                    mq.RType = Rabbitmq.TypeName.Direct;
+                    mq.RType = DRabbitMQ.TypeName.Direct;
 
                     mq.Init();
                     iQueue = mq;
@@ -60,7 +60,7 @@ namespace DQueueTest
         {
             try
             {
-                CreateInstance(queueName).SendMQMessage(dicString);
+                CreateInstance(queueName).PublishMQMessage(dicString);
             }
             catch (Exception ex)
             {
