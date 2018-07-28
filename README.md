@@ -1,1 +1,3 @@
-基于 rabbitmq 的封装
+基于 RabbitMQ 的封装
+接下来
+  封装基于ActiveMQ的封装
