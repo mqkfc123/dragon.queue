@@ -17,26 +17,30 @@ namespace DQueueService
         {
             try
             {
-                using (var rabRead = new DRabbitMQ())
+                var thread = new ThreadStart(() =>
                 {
-                    rabRead.QueueIP = "106.15.180.98";// ConfigurationManager.AppSettings["QueueUrl"];
-                    rabRead.QueueName = "Surevy_Reward_Queue";
-                    rabRead.VirtualHost = "15672"; 
-                    rabRead.ExchangeName = "SurevyExchangeName";
-                    rabRead.UserName = "zxsj";
-                    rabRead.Password = "zxsj";
-                    rabRead.AutoAck = false;
-                    rabRead.RType = DRabbitMQ.TypeName.Direct;
+                    using (var rabRead = new DRabbitMQ())
+                    {
+                        rabRead.QueueIP = "106.15.180.98";// ConfigurationManager.AppSettings["QueueUrl"];
+                        rabRead.QueueName = "Surevy_Reward_Queue";
+                        rabRead.VirtualHost = "15672";
+                        rabRead.ExchangeName = "SurevyExchangeName";
+                        rabRead.UserName = "zxsj";
+                        rabRead.Password = "zxsj";
+                        rabRead.AutoAck = false;
+                        rabRead.RType = DRabbitMQ.TypeName.Direct;
 
-                    rabRead.Init();
-                    rabRead.SubscribeQueue();
-
-                    //接收的消息
-                    rabRead.ReceiveMQMessage((eventArgs)=> {
-                        imq_onReceive(eventArgs);
-                    });
-
-                }
+                        rabRead.Init();
+                        rabRead.SubscribeQueue((eventArgs) =>
+                        {
+                            imq_onReceive(eventArgs);
+                        });
+                        //接收的消息
+                        rabRead.ReceiveMQMessage();
+                        rabRead.IsReceOver = true;
+                    }
+                });
+                thread.BeginInvoke(null, null);
             }
             catch (Exception ex)
             {

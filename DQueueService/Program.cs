@@ -17,6 +17,7 @@ namespace DQueueService
             RabbitMQService rabbitMQ = new RabbitMQService();
             rabbitMQ.SendMessActitvMQ();
 
+            Console.WriteLine("end");
             Console.ReadLine();
         }
     }

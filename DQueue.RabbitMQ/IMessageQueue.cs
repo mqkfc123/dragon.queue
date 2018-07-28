@@ -22,7 +22,7 @@ namespace DQueue.RabbitMQ
         /// <summary>
         /// 接收消息
         /// </summary>
-        void ReceiveMQMessage(Action<ReceiveEventArgs> action);
+        void ReceiveMQMessage();
         /// <summary>
         /// 查询消息条数
         /// </summary>

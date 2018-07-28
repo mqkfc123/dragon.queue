@@ -23,7 +23,7 @@ namespace DQueue.RabbitMQ
             /// <summary>
             /// 轮询
             /// </summary>
-            Direct, 
+            Direct,
             /// <summary>
             /// 正则条件匹配
             /// </summary>
@@ -72,10 +72,21 @@ namespace DQueue.RabbitMQ
         /// <summary>
         /// 订阅队列 后执行ReceiveMQMessage
         /// </summary>
-        public void SubscribeQueue()
+        public void SubscribeQueue(Action<ReceiveEventArgs> action)
         {
             //订阅队列类EventingBasicConsumer
             this._eventCnsumer = new EventingBasicConsumer(this._channel);
+            //获取订阅的时间，拉取数据
+            _eventCnsumer.Received += (sender, e) =>
+            {
+                var msg = Encoding.UTF8.GetString(e.Body);
+                //确认消息是否被消费
+                if (!this.AutoAck)
+                {
+                    this._channel.BasicAck(e.DeliveryTag, true);
+                    action?.Invoke(new ReceiveEventArgs(msg, this._channel));
+                }
+            };
             //指定消费队列
             this._channel.BasicConsume(this.QueueName, this.AutoAck, this._eventCnsumer);
         }
@@ -83,21 +94,14 @@ namespace DQueue.RabbitMQ
         /// <summary>
         /// 接收消息
         /// </summary>
-        public void ReceiveMQMessage(Action<ReceiveEventArgs> action)
+        public void ReceiveMQMessage()
         {
             try
             {
-                string empty = string.Empty;
-                //获取订阅的时间，拉取数据
-                _eventCnsumer.Received += (sender, e) =>
+                while (!this.IsReceOver)
                 {
-                    var msg = Encoding.UTF8.GetString(e.Body);
-                    action?.Invoke(new ReceiveEventArgs(msg, this._channel));
-                    if (!this.AutoAck)
-                    {
-                        this._channel.BasicAck(e.DeliveryTag, true);
-                    }
-                };
+                    System.Threading.Thread.Sleep(this.SleepInterval);
+                }
             }
             catch (Exception ex)
             {
@@ -149,12 +153,12 @@ namespace DQueue.RabbitMQ
         /// 初始化队列
         /// </summary>
         public void Init()
-        { 
+        {
             _connectionFactory = new ConnectionFactory();
             //ip地址
             _connectionFactory.HostName = this.QueueIP;
             //端口
-            _connectionFactory.Port = Convert.ToInt32(this.VirtualHost);
+            //_connectionFactory.Port = Convert.ToInt32(this.VirtualHost);
             _connectionFactory.UserName = this.UserName;
             _connectionFactory.Password = this.Password;
             //通过工厂创建连接
