@@ -76,7 +76,7 @@ namespace DQueue.RabbitMQ
         {
             //订阅队列类EventingBasicConsumer
             this._eventCnsumer = new EventingBasicConsumer(this._channel);
-            //获取订阅的时间，拉取数据
+            //获取订阅的消息，拉取数据
             _eventCnsumer.Received += (sender, e) =>
             {
                 var msg = Encoding.UTF8.GetString(e.Body);
