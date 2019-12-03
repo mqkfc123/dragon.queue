@@ -12,7 +12,7 @@ namespace DQueue.RabbitMQ
     public class DRabbitMQ : IDisposable, IMessageQueue
     {
         /// <summary>
-        /// RabbitMQ的四种交换机 40
+        /// RabbitMQ的四种交换机
         /// </summary>
         public enum TypeName
         {
