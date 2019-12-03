@@ -91,7 +91,7 @@ namespace DQueue
         public void SendMQMessage(string msgText)
         {
             IBasicProperties basicProperties = this._channel.CreateBasicProperties();
-            basicProperties.DeliveryMode = 2;
+            basicProperties.DeliveryMode = 2; //1 非持久化  2持久化消息
             this._channel.BasicPublish(this.ExchangeName, this.RoutingKey, basicProperties, System.Text.Encoding.UTF8.GetBytes(msgText));
         }
 
