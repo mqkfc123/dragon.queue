@@ -22,9 +22,9 @@ namespace DQueueService
                     using (var rabRead = new DRabbitMQ())
                     {
                         rabRead.QueueIP = "106.15.180.98";// ConfigurationManager.AppSettings["QueueUrl"];
-                        rabRead.QueueName = "Surevy_Reward_Queue";
+                        rabRead.QueueName = "QueueNameTest";
                         rabRead.VirtualHost = "15672";
-                        rabRead.ExchangeName = "SurevyExchangeName";
+                        rabRead.ExchangeName = "ExchangeNameTest";
                         rabRead.UserName = "zxsj";
                         rabRead.Password = "zxsj";
                         rabRead.AutoAck = false;
@@ -35,9 +35,8 @@ namespace DQueueService
                         {
                             imq_onReceive(eventArgs);
                         });
-                        //接收的消息
-                        rabRead.ReceiveMQMessage();
-                        rabRead.IsReceOver = true;
+                        //接收的消息 加一个循环判断， 不会退出using，等需要的时候在退出 
+                        rabRead.ReceiveMQMessage(); 
                     }
                 });
                 thread.BeginInvoke(null, null);

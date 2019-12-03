@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DQueue.RabbitMQ
@@ -76,6 +77,9 @@ namespace DQueue.RabbitMQ
         {
             //订阅队列类EventingBasicConsumer
             this._eventCnsumer = new EventingBasicConsumer(this._channel);
+            //指定消费队列
+            this._channel.BasicConsume(this.QueueName, this.AutoAck, this._eventCnsumer);
+
             //获取订阅的消息，拉取数据
             _eventCnsumer.Received += (sender, e) =>
             {
@@ -87,8 +91,6 @@ namespace DQueue.RabbitMQ
                     this._channel.BasicAck(e.DeliveryTag, true);
                 }
             };
-            //指定消费队列
-            this._channel.BasicConsume(this.QueueName, this.AutoAck, this._eventCnsumer);
         }
 
         /// <summary>
@@ -100,7 +102,7 @@ namespace DQueue.RabbitMQ
             {
                 while (!this.IsReceOver)
                 {
-                    System.Threading.Thread.Sleep(this.SleepInterval);
+                    Thread.Sleep(this.SleepInterval);
                 }
             }
             catch (Exception ex)
