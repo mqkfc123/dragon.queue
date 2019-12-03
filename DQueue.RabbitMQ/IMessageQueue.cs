@@ -20,6 +20,10 @@ namespace DQueue.RabbitMQ
         /// <param name="msgText"></param>
         void PublishMQMessage(string msgText);
         /// <summary>
+        /// 订阅队列 后执行ReceiveMQMessage
+        /// </summary>
+        void SubscribeQueue(Action<ReceiveEventArgs> action);
+        /// <summary>
         /// 接收消息
         /// </summary>
         void ReceiveMQMessage();

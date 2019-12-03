@@ -70,7 +70,7 @@ namespace DQueue.RabbitMQ
         }
 
         /// <summary>
-        /// 订阅队列 后执行ReceiveMQMessage
+        /// 订阅队列
         /// </summary>
         public void SubscribeQueue(Action<ReceiveEventArgs> action)
         {
@@ -80,11 +80,11 @@ namespace DQueue.RabbitMQ
             _eventCnsumer.Received += (sender, e) =>
             {
                 var msg = Encoding.UTF8.GetString(e.Body);
+                action?.Invoke(new ReceiveEventArgs(msg, this._channel)); 
                 //确认消息是否被消费
                 if (!this.AutoAck)
                 {
                     this._channel.BasicAck(e.DeliveryTag, true);
-                    action?.Invoke(new ReceiveEventArgs(msg, this._channel));
                 }
             };
             //指定消费队列
