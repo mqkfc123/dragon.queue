@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace DQueue.RabbitMQ
 {
-    public class DRabbitMQ : IDisposable, IMessageQueue
+    public class DRabbitMQ : IDisposable, IMessageQueue 
     {
         /// <summary>
-        /// RabbitMQ的四种交换机 40
-        /// </summary>
+        /// RabbitMQ的四种交换机 
+        /// </summary> 
         public enum TypeName
         {
             /// <summary>
