@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uPLibrary.Networking.M2Mqtt;
+using uPLibrary.Networking.M2Mqtt.Messages;
 
 namespace DQueueService
 {
@@ -16,8 +18,8 @@ namespace DQueueService
             //ActitvmqService activemq = new ActitvmqService();
             //activemq.SendMessActitvMQ();
 
-            RabbitMQService rabbitMQ = new RabbitMQService();
-            rabbitMQ.SendMessActitvMQ();
+            //RabbitMQService rabbitMQ = new RabbitMQService();
+            //rabbitMQ.SendMessActitvMQ();
 
             //var factory = new ConnectionFactory();
             //factory.HostName = "106.15.180.98";
@@ -28,7 +30,6 @@ namespace DQueueService
             //{
             //    using (var channel = connection.CreateModel())
             //    {
-
             //        ////申明交换机 
             //        //this._channel.ExchangeDeclare(this.ExchangeName, this.RType.ToString().ToLower(), true, false, null);
             //        ////申明队列
@@ -52,8 +53,31 @@ namespace DQueueService
             //    }
             //}
 
+
+            //create client instance  MqttClient client =  new  MqttClient(  "   127.0.0.1   "   );   //   register to message received  client.MqttMsgPublishReceived +=  client_MqttMsgPublishReceived;   string  clientId =  Guid.NewGuid().ToString();
+            MqttClient client = new MqttClient("10.16.0.78");
+            //register to message received  
+            
+            client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
+            var clientId = "dragon";
+            client.Connect(clientId, "ylzyx", "ylzyx", false, 60);
+
+            client.Subscribe(new string[] { "topic.ylz" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
+            
             Console.WriteLine("end");
             Console.ReadLine();
+
         }
+
+        static void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
+        {
+            string msg = Encoding.Default.GetString(e.Message);
+            
+            Console.WriteLine(msg);
+        }
+
+
     }
+
+  
 }
